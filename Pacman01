@@ -1,0 +1,42 @@
+from enum import Enum
+# The directions that Pacman can move in.
+class Direction(Enum):
+    NORTH = 0
+    EAST = 1
+    SOUTH = 2
+    WEST = 3
+# The state of a Pacman game.
+class PacmanState:
+    def __init__(self, pacman_position, food_positions, walls):
+        self.pacman_position = pacman_position
+        self.food_positions = food_positions
+        self.walls = walls
+# The actions that Pacman can take.
+class PacmanAction(Enum):
+    MOVE_NORTH = 0
+    MOVE_EAST = 1
+    MOVE_SOUTH = 2
+    MOVE_WEST = 3
+    EAT_FOOD = 4
+# The reward function for Pacman.
+def pacman_reward(state, action):
+    if action == PacmanAction.EAT_FOOD:
+        return 1
+    elif action == PacmanAction.MOVE_NORTH or action == PacmanAction.MOVE_EAST or action == PacmanAction.MOVE_SOUTH or action == PacmanAction.MOVE_WEST:
+        return -1
+    else:
+        return 0
+# The transition function for Pacman.
+def pacman_transition(state, action):
+    if action == PacmanAction.MOVE_NORTH:
+        new_pacman_position = (state.pacman_position[0] - 1, state.pacman_position[1])
+    elif action == PacmanAction.MOVE_EAST:
+        new_pacman_position = (state.pacman_position[0], state.pacman_position[1] + 1)
+    elif action == PacmanAction.MOVE_SOUTH:
+        new_pacman_position = (state.pacman_position[0] + 1, state.pacman_position[1])
+    elif action == PacmanAction.MOVE_WEST:
+        new_pacman_position = (state.pacman_position[0], state.pacman_position[1] - 1)
+    else:
+        new_pacman_position = state.pacman_position
+    if new_pacman_position in state.food_positions:
+        new_food_positions = [food_position for food_position in state.food_positions if food_position != new_pacman
